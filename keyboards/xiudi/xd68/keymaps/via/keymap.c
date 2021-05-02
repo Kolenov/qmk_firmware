@@ -1,77 +1,41 @@
 #include QMK_KEYBOARD_H
 
+#define M_LOCK LGUI(LCTL(KC_Q)) // Lock Mac
+#define W_LOCK LGUI(KC_L)       // Lock Win
+
 enum layer_number {
     _WIN = 0,
-    _FL,
     _MAC,
-    _BLANK
-};
-
-// Tap dance declarations (These must go above the keymaps)
-enum {
-  TD_MLCK = 0,
-  TD_WLCK,
-  TD_PU,
-  TD_PD,
+    _BLANK,
+    _FL
 };
 
 enum custom_keycodes {
   MAC = SAFE_RANGE,
   WIN,
-};
-
-#define MLCK LGUI(LCTL(KC_Q)) // Lock Mac
-#define WLCK LGUI(KC_L)       // Lock Win
-
-// Tapdance definitions.
-qk_tap_dance_action_t tap_dance_actions[] = {
-  [TD_MLCK] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, MLCK),
-  [TD_WLCK] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, WLCK),
-  [TD_PU] = ACTION_TAP_DANCE_DOUBLE(KC_PGUP, KC_HOME),
-  [TD_PD] = ACTION_TAP_DANCE_DOUBLE(KC_PGDN, KC_END),
+  LOCK
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap _BL: (Base Layer) Default Layer
      * ,----------------------------------------------------------------.
-     * |Esc | 1|  2|  3|  4|  5|  6|  7|  8|  9|  0|  -|  =|Backsp |~ ` |
+     * |Esc | 1|  2|  3|  4|  5|  6|  7|  8|  9|  0|  -|  =|Backsp |Home|
      * |----------------------------------------------------------------|
-     * |Tab  |  Q|  W|  E|  R|  T|  Y|  U|  I|  O|  P|  [|  ]|  \  |Del |
+     * |Tab  |  Q|  W|  E|  R|  T|  Y|  U|  I|  O|  P|  [|  ]|  \  |PgUp|
      * |----------------------------------------------------------------|
-     * |CAPS   |  A|  S|  D|  F|  G|  H|  J|  K|  L|  ;|  '|Return |PgUp|
+     * |CAPS   |  A|  S|  D|  F|  G|  H|  J|  K|  L|  ;|  '|Return |PgDn|
      * |----------------------------------------------------------------|
-     * |Shift   |  Z|  X|  C|  V|  B|  N|  M|  ,|  .|  /|Shift | Up|PgDn|
+     * |Shift   |  Z|  X|  C|  V|  B|  N|  M|  ,|  .|  /|Shift | Up|End |
      * |----------------------------------------------------------------|
      * |Ctrl|Win |Alt |        Space          |App|Ctrl|FN |Lef|Dow|Rig |
      * `----------------------------------------------------------------'
      */
     [_WIN] = LAYOUT_65_ansi(
-        TD(TD_WLCK),  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_GRV,
-        KC_TAB,       KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_DEL,
-        KC_CAPS,      KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  TD(TD_PU),
-        KC_LSFT,               KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_UP,   TD(TD_PD),
-        KC_LCTL,      KC_LGUI, KC_LALT,                            KC_SPC,                    KC_APP,  KC_RCTL, MO(_FL), KC_LEFT, KC_DOWN, KC_RGHT
-    ),
-
-    /* Keymap _FL: Function Layer
-     * ,---------------------------------------------------------------.
-     * |PWR| F1|F2 |F3 |F4 |F5 |F6 |F7 |F8 |F9 |F10|F11|F12|Del    |Ins|
-     * |---------------------------------------------------------------|
-     * |     |   |WIN|   |   |   |   |   |   |   |   |   |   |     |   |
-     * |---------------------------------------------------------------|
-     * |      |   |   |   |   |   |   |   |   |   |   |   |        |   |
-     * |---------------------------------------------------------------|
-     * |         |   |   |   |   |   |   |MAC|   |   |   |Play |V+ |Mut|
-     * |---------------------------------------------------------------|
-     * |    |    |    |                        |   |   |   | <M|V- |M> |
-     * `---------------------------------------------------------------'
-     */
-    [_FL] = LAYOUT_65_ansi(
-        KC_PWR,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,    KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_INS,
-        _______, _______, WIN,     _______, _______, _______, _______, _______, _______,  _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______,          _______, _______,
-        _______,          _______, _______, _______, _______, _______, _______, MAC,      _______, _______, _______, KC_MPLY, KC_VOLU, KC_MUTE,
-        _______, _______, _______,                            _______,                    _______, _______, KC_TRNS, KC_MPRV, KC_VOLD, KC_MNXT
+        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_HOME,
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_PGUP,
+        KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_PGDN,
+        KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_UP,   KC_END,
+        KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                    KC_APP,  KC_RCTL, MO(_FL), KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
     /* Keymap _MAC: Mac Layer
@@ -84,15 +48,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |---------------------------------------------------------------|
      * |        |   |   |   |   |   |   |   |   |   |   |      |   |   |
      * |---------------------------------------------------------------|
-     * |Ctrl|Alt |Win |                        |Win|Alt|   |   |   |   |
+     * |Ctrl|Alt |Gui |                        |Gui|Alt|   |   |   |   |
      * `---------------------------------------------------------------'
      */
     [_MAC] = LAYOUT_65_ansi(
-        TD(TD_MLCK), _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______,     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______,     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______,
-        _______,              _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        KC_LCTL,     KC_LALT, KC_LGUI,                         _______,                      KC_RGUI, KC_RALT, _______, _______, _______, _______
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______,
+        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        KC_LCTL, KC_LALT, KC_LGUI,                         _______,                      KC_RGUI, KC_RALT, _______, _______, _______, _______
     ),
 
     /* Blank Template
@@ -115,25 +79,60 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
       _______, _______, _______,                            _______,                   _______, _______, _______, _______, _______, _______
       ),
+
+    /* Keymap _FL: Function Layer
+     * ,---------------------------------------------------------------.
+     * |~ `| F1|F2 |F3 |F4 |F5 |F6 |F7 |F8 |F9 |F10|F11|F12|Del    |Ins|
+     * |---------------------------------------------------------------|
+     * |     |   |WIN|   |   |   |   |   |   |   |PWR|   |   |     |   |
+     * |---------------------------------------------------------------|
+     * |      |   |   |   |   |   |   |   |   |LOCK|   |   |       |   |
+     * |---------------------------------------------------------------|
+     * |         |   |   |   |   |   |   |MAC|   |   |   |Play |V+ |Mut|
+     * |---------------------------------------------------------------|
+     * |    |    |    |                        |   |   |   | <M|V- |M> |
+     * `---------------------------------------------------------------'
+     */
+
+    [_FL] = LAYOUT_65_ansi(
+        KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,    KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_INS,
+        _______, _______, WIN,     _______, _______, _______, _______, _______, _______,  _______, KC_PWR, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______,  LOCK,    _______, _______,          _______, _______,
+        _______,          _______, _______, _______, _______, _______, _______, MAC,      _______, _______, _______, KC_MPLY, KC_VOLU, KC_MUTE,
+        _______, _______, _______,                            _______,                    _______, _______, _______, KC_MPRV, KC_VOLD, KC_MNXT
+    )
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-switch (keycode) {
-    case MAC: // Change default ayer --> Write to EEPROM
-        if (record->event.pressed) {
-            set_single_persistent_default_layer(_MAC);
-        }
-        return false;
-        break;
-    case WIN: // Change default ayer --> Write to EEPROM
-        if (record->event.pressed) {
-            set_single_persistent_default_layer(_WIN);
-        }
-        return false;
-        break;
-    default:
-        break;
+    int current_layer = biton32(default_layer_state);
+
+    switch (keycode) {
+        case MAC:
+            if ( record->event.pressed ) {
+                set_single_persistent_default_layer(_MAC);
+            }
+            return false;
+            break;
+        case WIN:
+            if ( record->event.pressed ) {
+                set_single_persistent_default_layer(_WIN);
+            }
+            return false;
+            break;
+        case LOCK:
+            if (record->event.pressed) {
+                if (current_layer == _WIN) {
+                    tap_code16(W_LOCK);
+                }
+                if (current_layer == _MAC) {
+                    tap_code16(M_LOCK);
+                }
+            }
+            return false;
+            break;
+
+        default:
+            break;
     }
     return true;
-}
-
+};
