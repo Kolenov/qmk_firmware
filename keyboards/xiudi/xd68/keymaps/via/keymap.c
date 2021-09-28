@@ -3,6 +3,19 @@
 #define M_LOCK LGUI(LCTL(KC_Q)) // Lock Mac
 #define W_LOCK LGUI(KC_L)       // Lock Win
 
+// Tap dance declarations (These must go above the keymaps)
+enum {
+  HOMETILD = 0,
+  ESCGRV,
+  LBCB,
+  RBCB,
+};
+
+#define TD_HT TD(HOMETILD)
+#define TD_GRV TD(ESCGRV)
+#define TD_LBCB TD(LBCB)
+#define TD_RBCB TD(RBCB)
+
 enum layer_number {
     _WIN = 0,
     _MAC,
@@ -31,8 +44,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `----------------------------------------------------------------'
      */
     [_WIN] = LAYOUT_65_ansi(
-        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_HOME,
-        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_PGUP,
+        TD_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, TD_HT,
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    TD_LBCB, TD_RBCB, KC_BSLS, KC_PGUP,
         KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_PGDN,
         KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_UP,   KC_END,
         KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                    KC_APP,  KC_RCTL, MO(_FL), KC_LEFT, KC_DOWN, KC_RGHT
@@ -93,7 +106,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |    |    |    |                        |   |   |   | <M|V- |M> |
      * `---------------------------------------------------------------'
      */
-
     [_FL] = LAYOUT_65_ansi(
         KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,    KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_INS,
         _______, _______, WIN,     _______, _______, _______, _______, _______, _______,  _______, KC_PWR,  _______, _______, _______, _______,
@@ -101,6 +113,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,          _______, _______, _______, BL_DEC,  BL_TOGG, BL_INC,  MAC,      _______, _______, _______, KC_MPLY, KC_VOLU, KC_MUTE,
         _______, _______, _______,                            _______,                    _______, _______, _______, KC_MPRV, KC_VOLD, KC_MNXT
     )
+};
+
+// Tapdance definitions.
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [HOMETILD] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, KC_TILD),
+  [ESCGRV] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, KC_GRV),
+  [LBCB] = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, KC_LCBR),  // Left bracket on a single-tap, left brace on a double-tap
+  [RBCB] = ACTION_TAP_DANCE_DOUBLE(KC_RBRC, KC_RCBR),  // Right bracket on a single-tap, right brace on a double-tap
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
