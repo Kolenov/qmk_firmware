@@ -24,7 +24,7 @@ enum layer_number {
 };
 
 enum custom_keycodes {
-  MAC = SAFE_RANGE,
+  APPLE = SAFE_RANGE,
   WIN,
   LOCK
 };
@@ -99,9 +99,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |---------------------------------------------------------------|
      * |     |   |WIN|   |   |   |   |   |   |   |PWR|   |   |     |   |
      * |---------------------------------------------------------------|
-     * |      |   |   |   |   |   |   |   |   |LOCK|   |   |       |   |
+     * |      |MAC|   |   |   |   |   |   |   |LOCK|   |   |       |   |
      * |---------------------------------------------------------------|
-     * |         |   |   |   |BL-|BL |BL+|MAC|   |   |   |Play |V+ |Mut|
+     * |         |   |   |   |BL-|BL |BL+|   |   |   |   |Play |V+ |Mut|
      * |---------------------------------------------------------------|
      * |    |    |    |                        |   |   |   | <M|V- |M> |
      * `---------------------------------------------------------------'
@@ -109,8 +109,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FL] = LAYOUT_65_ansi(
         KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,    KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_INS,
         _______, _______, WIN,     _______, _______, _______, _______, _______, _______,  _______, KC_PWR,  _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______,  LOCK,    _______, _______,          _______, _______,
-        _______,          _______, _______, _______, BL_DEC,  BL_TOGG, BL_INC,  MAC,      _______, _______, _______, KC_MPLY, KC_VOLU, KC_MUTE,
+        _______, APPLE,   _______, _______, _______, _______, _______, _______, _______,  LOCK,    _______, _______,          _______, _______,
+        _______,          _______, _______, _______, BL_DEC,  BL_TOGG, BL_INC,  _______,  _______, _______, _______, KC_MPLY, KC_VOLU, KC_MUTE,
         _______, _______, _______,                            _______,                    _______, _______, _______, KC_MPRV, KC_VOLD, KC_MNXT
     )
 };
@@ -123,19 +123,39 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [RBCB] = ACTION_TAP_DANCE_DOUBLE(KC_RBRC, KC_RCBR),  // Right bracket on a single-tap, right brace on a double-tap
 };
 
+void led_blink(uint8_t count) {
+    uint8_t n = 0;
+
+    while (n < count) {
+        backlight_toggle();
+        wait_ms(500);
+        backlight_toggle();
+        wait_ms(500);
+        n++;
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     int current_layer = biton32(default_layer_state);
 
     switch (keycode) {
-        case MAC:
+        case APPLE:
             if ( record->event.pressed ) {
+                if (current_layer == _MAC) {
+                    return false;
+                }
                 set_single_persistent_default_layer(_MAC);
+                led_blink(2);
             }
             return false;
             break;
         case WIN:
+            if (current_layer == _WIN) {
+                return false;
+            }
             if ( record->event.pressed ) {
                 set_single_persistent_default_layer(_WIN);
+                led_blink(1);
             }
             return false;
             break;
