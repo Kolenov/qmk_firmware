@@ -20,13 +20,14 @@ enum layer_number {
     _WIN = 0,
     _MAC,
     _BLANK,
-    _FL
+    _FL,
 };
 
 enum custom_keycodes {
   APPLE = SAFE_RANGE,
   WIN,
-  LOCK
+  LOCK,
+  ARROWFN,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -110,7 +111,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,    KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_INS,
         _______, _______, WIN,     _______, _______, _______, _______, _______, _______,  _______, KC_PWR,  _______, _______, _______, _______,
         _______, APPLE,   _______, _______, _______, _______, _______, _______, _______,  LOCK,    _______, _______,          _______, _______,
-        _______,          _______, _______, _______, BL_DEC,  BL_TOGG, BL_INC,  _______,  _______, _______, _______, KC_MPLY, KC_VOLU, KC_MUTE,
+        _______,          _______, _______, _______, BL_DEC,  BL_TOGG, BL_INC,  _______,  _______, ARROWFN, _______, KC_MPLY, KC_VOLU, KC_MUTE,
         _______, _______, _______,                            _______,                    _______, _______, _______, KC_MPRV, KC_VOLD, KC_MNXT
     )
 };
@@ -141,6 +142,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case APPLE:
             if ( record->event.pressed ) {
+                SEND_STRING(" = () => ");
                 if (current_layer == _MAC) {
                     return false;
                 }
@@ -170,7 +172,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
             break;
-
+        case ARROWFN:
+            if (record->event.pressed) {
+                SEND_STRING(" = () => ");
+            }
+            return false;
+            break;
         default:
             break;
     }
