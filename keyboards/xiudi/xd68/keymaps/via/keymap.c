@@ -111,13 +111,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,    KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_INS,
         _______, _______, WIN,     _______, _______, _______, _______, _______, _______,  _______, KC_PWR,  _______, _______, _______, _______,
         _______, APPLE,   _______, _______, _______, _______, _______, _______, _______,  LOCK,    _______, _______,          _______, _______,
-        _______,          _______, _______, _______, BL_DEC,  BL_TOGG, BL_INC,  _______,  _______, ARROWFN, _______, KC_MPLY, KC_VOLU, KC_MUTE,
+        _______,          _______, _______, _______, BL_DOWN, BL_TOGG, BL_UP  ,  _______,  _______, ARROWFN, _______, KC_MPLY, KC_VOLU, KC_MUTE,
         _______, _______, _______,                            _______,                    _______, _______, _______, KC_MPRV, KC_VOLD, KC_MNXT
     )
 };
 
 // Tapdance definitions.
-qk_tap_dance_action_t tap_dance_actions[] = {
+tap_dance_action_t tap_dance_actions[] = {
   [HOMETILD] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, KC_TILD),
   [ESCGRV] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, KC_GRV),
   [LBCB] = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, KC_LCBR),  // Left bracket on a single-tap, left brace on a double-tap
@@ -142,7 +142,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case APPLE:
             if ( record->event.pressed ) {
-                SEND_STRING(" = () => ");
                 if (current_layer == _MAC) {
                     return false;
                 }
